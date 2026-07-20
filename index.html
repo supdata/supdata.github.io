@@ -375,7 +375,7 @@ class Component extends DCLogic {
     const activeScreen = this.screens[idx] || this.screens[0] || { img: './img/dashboard.png' };
     const dark = !!this.state.dark;
     const t = dark ? THEMES.dark : THEMES.light;
-    const rootStyle = `font-family:'Inter',sans-serif; width:100%; min-height:100vh; overflow-x:hidden; transition:background .2s,color .2s; background:${t.bg}; color:${t.fg}; --bg:${t.bg}; --fg:${t.fg}; --fg-muted:${t.fgMuted}; --fg-muted-2:${t.fgMuted2}; --card:${t.card}; --card-alt:${t.cardAlt}; --border:${t.border}; --accent:${t.accent}; --accent-bg:${t.accentBg}; --inverse-bg:${t.inverseBg}; --inverse-fg:${t.inverseFg}; --inverse-fg-muted:${t.inverseFgMuted}; --nav-bg:${t.navBg}; --num-badge:${t.numBadge}; --btn-ghost-bg:${t.btnGhostBg};`;
+    const rootStyle = `font-family:'Inter',sans-serif; width:100%; min-height:100vh; overflow-x:clip; transition:background .2s,color .2s; background:${t.bg}; color:${t.fg}; --bg:${t.bg}; --fg:${t.fg}; --fg-muted:${t.fgMuted}; --fg-muted-2:${t.fgMuted2}; --card:${t.card}; --card-alt:${t.cardAlt}; --border:${t.border}; --accent:${t.accent}; --accent-bg:${t.accentBg}; --inverse-bg:${t.inverseBg}; --inverse-fg:${t.inverseFg}; --inverse-fg-muted:${t.inverseFgMuted}; --nav-bg:${t.navBg}; --num-badge:${t.numBadge}; --btn-ghost-bg:${t.btnGhostBg};`;
     const screens = this.screens.map((s, i) => ({
       ...s,
       select: () => { this.setState({ screenIdx: i }); this.restartAutoplay(); },
