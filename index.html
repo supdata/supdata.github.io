@@ -218,9 +218,17 @@
     <p style="font-size: 16px; color: var(--fg-muted); margin: 0 0 40px; max-width: 560px;">O portal por dentro — dashboard, política de backup, dicionário de dados e relatórios.</p>
 
     <div style="position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--card);">
-      <img src="{{ activeScreen.img }}" alt="{{ activeScreen.title }}" style="width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; background: var(--card-alt);">
+      <img src="{{ activeScreen.img }}" alt="{{ activeScreen.title }}" onClick="{{ openLightbox }}" style="width: 100%; display: block; aspect-ratio: 16/10; object-fit: contain; background: var(--card-alt); cursor: zoom-in;">
       <button onClick="{{ prevScreen }}" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--btn-ghost-bg); box-shadow: 0 4px 12px oklch(20% 0.02 90 / 0.15); font-size: 18px; cursor: pointer; color: var(--fg);">‹</button>
       <button onClick="{{ nextScreen }}" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--btn-ghost-bg); box-shadow: 0 4px 12px oklch(20% 0.02 90 / 0.15); font-size: 18px; cursor: pointer; color: var(--fg);">›</button>
+      <button onClick="{{ openLightbox }}" aria-label="Expandir imagem" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--btn-ghost-bg); box-shadow: 0 4px 12px oklch(20% 0.02 90 / 0.15); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <div style="position: relative; width: 14px; height: 14px;">
+          <div style="position: absolute; top: 0; left: 0; width: 6px; height: 6px; border-top: 2px solid var(--fg); border-left: 2px solid var(--fg);"></div>
+          <div style="position: absolute; top: 0; right: 0; width: 6px; height: 6px; border-top: 2px solid var(--fg); border-right: 2px solid var(--fg);"></div>
+          <div style="position: absolute; bottom: 0; left: 0; width: 6px; height: 6px; border-bottom: 2px solid var(--fg); border-left: 2px solid var(--fg);"></div>
+          <div style="position: absolute; bottom: 0; right: 0; width: 6px; height: 6px; border-bottom: 2px solid var(--fg); border-right: 2px solid var(--fg);"></div>
+        </div>
+      </button>
       <div style="padding: 22px 26px;">
         <h3 style="margin: 0 0 6px; font-size: 19px; font-weight: 700;">{{ activeScreen.title }}</h3>
         <p style="margin: 0; font-size: 15px; color: var(--fg-muted);">{{ activeScreen.desc }}</p>
@@ -232,6 +240,18 @@
       </sc-for>
     </div>
   </div>
+
+  <sc-if value="{{ isLightboxOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 100; background: oklch(10% 0.01 260 / 0.85); display: flex; align-items: center; justify-content: center; padding: 40px; cursor: zoom-out;">
+      <img src="{{ activeScreen.img }}" alt="{{ activeScreen.title }}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 60px oklch(0% 0 0 / 0.4);">
+      <button onClick="{{ closeLightbox }}" aria-label="Fechar" style="position: absolute; top: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(100% 0 0 / 0.15); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <div style="position: relative; width: 16px; height: 16px;">
+          <div style="position: absolute; top: 7px; left: 0; width: 16px; height: 2px; border-radius: 1px; background: white; transform: rotate(45deg);"></div>
+          <div style="position: absolute; top: 7px; left: 0; width: 16px; height: 2px; border-radius: 1px; background: white; transform: rotate(-45deg);"></div>
+        </div>
+      </button>
+    </div>
+  </sc-if>
 
   <!-- STACK -->
   <div id="stack" style="padding: 70px 64px; background: var(--card-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
@@ -299,7 +319,7 @@ const THEMES = {
 };
 
 class Component extends DCLogic {
-  state = { screenIdx: 0, dark: false, mobileMenuOpen: false };
+  state = { screenIdx: 0, dark: false, mobileMenuOpen: false, lightboxOpen: false };
 
   componentDidMount() {
     this._autoplay = setInterval(() => {
@@ -369,6 +389,9 @@ class Component extends DCLogic {
       isMobileMenuClosed: !this.state.mobileMenuOpen,
       toggleMobileMenu: () => this.setState(s => ({ mobileMenuOpen: !s.mobileMenuOpen })),
       closeMobileMenu: () => this.setState({ mobileMenuOpen: false }),
+      isLightboxOpen: !!this.state.lightboxOpen,
+      openLightbox: () => this.setState({ lightboxOpen: true }),
+      closeLightbox: () => this.setState({ lightboxOpen: false }),
       pilares: this.pilares,
       stack: this.stack,
       ciclo: this.ciclo,
